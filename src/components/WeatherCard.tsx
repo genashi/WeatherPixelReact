@@ -5,6 +5,8 @@ import { SettingsDrawer } from './settings';
 import { useSelector } from 'react-redux';
 import { RootState } from '../Store/store';
 import { ManageLocations } from './ManageLocation';
+import { ThemeProvider } from '../theme/ThemeProvider';
+import { WeatherIcon } from './WeatherIcon';
 
 const { Title, Text } = Typography;
 
@@ -15,7 +17,7 @@ export const WeatherCard: React.FC = () => {
 
   const convertTemperature = (temp: number) => (isCelsius ? temp : temp * 9 / 5 + 32);
   const convertWindSpeed = (speed: number) => (isKmPerHour ? speed * 3.6 : speed);
-  const convertPressure = (pressure: number) => (isMbar ? pressure * 0.7501 : pressure); // Исправил опечатку в имени функции
+  const convertPressure = (pressure: number) => (isMbar ? pressure * 0.7501 : pressure);
 
   const getNext4HoursForecast = () => {
     if (!data || !data.forecast || !data.forecast.forecastday) return [];
@@ -36,13 +38,7 @@ export const WeatherCard: React.FC = () => {
   const forecastNext4Hours = getNext4HoursForecast();
 
   return (
-    <div style={{
-      padding: "20px",
-      background: "linear-gradient(to bottom, #222a7f, #72809d)", // Градиент как просил
-      minHeight: "100vh",
-      fontFamily: "'Roboto Rounded', sans-serif", // Округлый шрифт — добавь Google Fonts в index.html
-      color: "#fff", // Белый текст для контраста на градиенте
-    }}>
+    <ThemeProvider conditionText={data?.current.condition.text}>
       <ManageLocations />
       <SettingsDrawer />
       {isLoading ? (
@@ -53,32 +49,64 @@ export const WeatherCard: React.FC = () => {
         data && (
           <div>
             {/* Основная инфа */}
-            <div style={{ textAlign: "center", marginBottom: "5%" }}>
-              <Title level={3} style={{ color: "#fff", marginBottom: 0 }}>
+            <div style={{ textAlign: "center", marginBottom: "0%", fontFamily: "'Roboto Flex', sans-serif" }}>
+              {/* Город и время */}
+              {/* <Text
+                style={{
+                  display: "block",
+                  marginBottom: "0%",
+                  opacity: 0.8,
+                  fontSize: "0.95rem",
+                  fontVariationSettings: '"opsz" 14, "wght" 400',
+                }}
+              >
+                {data.location.localtime}
+              </Text> */}
+              <Title
+                level={2}
+                style={{
+                  marginBottom: "6%",
+                  fontWeight: 600,
+                  letterSpacing: "-0.5px",
+                  fontVariationSettings: '"opsz" 40, "wght" 600',
+                }}
+              >
                 {data.location.name}
               </Title>
-              <Text style={{ display: "block", color: "#ddd" , marginBottom: "10%"}}>
-                {data.location.localtime}
-              </Text>
-              <Image src={data.current.condition.icon} preview={false} />
-              <Text style={{ display: "block", fontSize: "100%", color: "#fff" }}>
-                {data.current.condition.text}
-              </Text>
-              <div style={{ fontSize: "1000%", lineHeight: 1, marginBottom: "150px" }}>
-                {convertTemperature(data.current.temp_c).toFixed(1)}°{isCelsius ? 'C' : 'F'}
+
+              {/* Иконка и описание */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "12px",
+                  marginBottom: "1.5%",
+                }}
+              >
+                <WeatherIcon condition={data.current.condition.text} size={40} />
+                <Text
+                  style={{
+                    fontSize: "1.25rem",
+                    fontVariationSettings: '"opsz" 18, "wght" 450',                    
+                  }}
+                >
+                  {data.current.condition.text}
+                </Text>
               </div>
-              <Divider style={{ borderColor: "#fff" }} />
-              <Row justify="space-around" style={{ marginTop: "20px" }}>
-                <Col>
-                  <Text>Ветер: {convertWindSpeed(data.current.wind_mph).toFixed(1)} {isKmPerHour ? 'км/ч' : 'м/с'}</Text>
-                </Col>
-                <Col>
-                  <Text>Давление: {convertPressure(data.current.pressure_mb).toFixed(1)} {isMbar ? 'мм.рт.ст' : 'гПа'}</Text>
-                </Col>
-                <Col>
-                  <Text>Влажность: {data.current.humidity}%</Text>
-                </Col>
-              </Row>
+
+              {/* Температура */}
+              <div
+                style={{
+                  fontSize: "8rem",
+                  fontWeight: 300,
+                  lineHeight: 1,
+                  marginBottom: "8%",
+                  fontVariationSettings: '"opsz" 100, "wght" 300',
+                }}
+              >
+                {convertTemperature(data.current.temp_c).toFixed(1)}°{isCelsius ? "C" : "F"}
+              </div>
             </div>
 
             {/* Почасовой прогноз: Horizontal scroll, столбец на час (temp, icon, humidity, time) */}
@@ -131,10 +159,29 @@ export const WeatherCard: React.FC = () => {
                 </Row>
               </div>
             </Card>
+            <Divider />
+              {/* Доп. параметры */}
+              <Row justify="space-around" style={{ marginTop: "20px" }}>
+                <Col>
+                  <Text style={{ opacity: 0.9 }}>
+                    Ветер: {convertWindSpeed(data.current.wind_mph).toFixed(1)}{" "}
+                    {isKmPerHour ? "км/ч" : "м/с"}
+                  </Text>
+                </Col>
+                <Col>
+                  <Text style={{ opacity: 0.9 }}>
+                    Давление: {convertPressure(data.current.pressure_mb).toFixed(1)}{" "}
+                    {isMbar ? "мм.рт.ст" : "гПа"}
+                  </Text>
+                </Col>
+                <Col>
+                  <Text style={{ opacity: 0.9 }}>Влажность: {data.current.humidity}%</Text>
+                </Col>
+              </Row>
           </div>
         )
       )}
-    </div>
+    </ThemeProvider>
   );
 };
 

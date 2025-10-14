@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { weatherApi } from '../weatherApi/weatherApi';
 import measurementReducer from './Slices/MeasurementSlice';
 import citiesReducer from './Slices/CitiesSlice';
+import settingsReducer from './Slices/SettingsSlice';
 import { loadFromLocalStorage, loadFromLocalStorageMeasurement, saveToLocalStorage, saveToLocalStorageMeasurement } from './LocalStorage';
 
 const preloadedState = loadFromLocalStorage()|| {};
@@ -11,6 +12,7 @@ export const store = configureStore({
     [weatherApi.reducerPath]: weatherApi.reducer,
     measurement: measurementReducer,
     cities: citiesReducer,
+    settings: settingsReducer,
   },
   preloadedState: { cities: preloadedState, measurement: preloadedStateMeasurement || [] },
   middleware: (getDefaultMiddleware) =>
