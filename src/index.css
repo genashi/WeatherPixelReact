@@ -1,14 +1,41 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
 
-
-body {
-margin: 0;
-padding: 0;
-font-family: 'Nunito', sans-serif;
-background: transparent;
+:root {
+  --bg: #fff;
+  --text: #111;
+  --card: rgba(255,255,255,0.9);
+  --accent: #6750A4;
+  --gradient: linear-gradient(to bottom, #90CAF9, #1565C0);
+  --card-text: #111;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* Основные правила */
+body, #root {
+  background: var(--gradient);
+  color: var(--text);
+  font-family: 'Nunito', sans-serif;
+}
+
+/* Принудительное наследование цвета для ant-typography */
+.ant-typography,
+.ant-typography * {
+  color: inherit !important;
+}
+
+/* Карточки Ant используют нашу переменную */
+.ant-card {
+  background: var(--card) !important;
+  color: var(--card-text) !important;
+  border: none;
+  box-shadow: none;
+}
+
+/* Заголовки карточек */
+.ant-card-head-title {
+  color: inherit !important;
+}
+
+/* Сброс фона для body элементов Ant (если потребуется) */
+.ant-layout {
+  background: transparent !important;
 }

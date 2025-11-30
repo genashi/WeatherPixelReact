@@ -1,42 +1,31 @@
-// src/theme/ThemeProvider.tsx
 import React, { ReactNode } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../Store/store';
 import { useDynamicTheme } from './useDynamicTheme';
-import { getTypography } from './typography';
 
 
-export const ThemeProvider: React.FC<{ children: ReactNode; conditionText?: string }> = ({
-  children,
-  conditionText,
-}) => {
-  const theme = useDynamicTheme(conditionText);
-  const typography = getTypography(theme.isDark);
+export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const theme = useDynamicTheme();
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.style.setProperty('--bg', theme.background);
+    root.style.setProperty('--text', theme.text);
+    root.style.setProperty('--card', theme.card);
+    root.style.setProperty('--accent', theme.accent);
+    root.style.setProperty('--gradient', theme.gradient);
+    root.style.setProperty('--card-text', theme.cardText || theme.text);
+  }, [theme]);
 
   return (
-    <div
-      style={{
+    <div style={{
       minHeight: '100vh',
-      background: theme.gradient,
-      color: typography.color,
-      fontFamily: typography.fontFamily,
-      fontWeight: typography.fontWeight,
-      lineHeight: typography.lineHeight,
-      transition: 'background 0.6s ease, color 0.4s ease',
-      }}
-      >
+      background: 'var(--gradient)',
+      color: 'var(--text)',
+      fontFamily: "'Roboto Flex', sans-serif",
+      transition: 'background 0.6s ease, color 0.4s ease'
+    }}>
       {children}
-      {/* передаём тему в контекст */}
-      <div
-        style={{
-          padding: '20px',
-          transition: 'color 0.4s ease',
-        }}
-      >
-        {React.Children.map(children, (child) =>
-          React.isValidElement(child)
-            ? React.cloneElement(child as any, { theme })
-            : child
-        )}
-      </div>
     </div>
   );
 };

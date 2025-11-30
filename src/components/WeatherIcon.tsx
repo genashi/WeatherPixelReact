@@ -5,31 +5,26 @@ interface WeatherIconProps {
   size?: number;
 }
 
-const conditionMap: Record<string, string> = {
-  "солнечно": "clear_day",
-  "ясно": "clear_day",
-  "малооблачно": "mostly_clear_day",
-  "переменная облачность": "partly_cloudy_day",
-  "облачно": "cloudy",
-  "пасмурно": "cloudy",
-  "дождь": "cloudy_with_rain_dark",
-  "ливень": "heavy_rain",
-  "снег": "cloudy_with_snow_dark",
-  "снегопад": "heavy_snow",
-  "гроза": "isolated_thunderstorms",
-  "туман": "haze_fog_dust_smoke",
-  "морось": "drizzle",
-  "ветрено": "windy",
-  "местами дождь": "sunny_with_rain_dark",
-  "местами дождливо": "sunny_with_rain_dark",
-};
+const mapping: Array<{ tests: string[]; file: string }> = [
+  { tests: ['ясн', 'солнеч', 'clear'], file: 'clear_day' },
+  { tests: ['облачно', 'пасмур', 'cloud'], file: 'cloudy' },
+  { tests: ['перемен', 'местами', 'partly', 'partly-cloudy'], file: 'partly_cloudy_day' },
+  { tests: ['дожд', 'rain', 'рain'], file: 'rain' },
+  { tests: ['ливен', 'shower', 'heavy'], file: 'heavy_rain' },
+  { tests: ['гроз', 'thunder'], file: 'thunderstorm' },
+  { tests: ['снег', 'snow'], file: 'snow' },
+  { tests: ['туман', 'fog', 'haze'], file: 'fog' },
+  { tests: ['морос', 'drizzle'], file: 'drizzle' },
+  { tests: ['ветр', 'wind'], file: 'windy' },
+];
 
 export const WeatherIcon: React.FC<WeatherIconProps> = ({ condition, size = 64 }) => {
-  // нормализуем строку для поиска (убираем регистр и лишние пробелы)
-  const key = condition.trim().toLowerCase();
-  const iconName = conditionMap[key] || "unknown";
+  const norm = (condition || '').trim().toLowerCase();
 
-  // иконки лежат в public/icons/weather/, без повторного .svg в названии
+  // Поиск первой подходящей записи (includes)
+  const found = mapping.find(m => m.tests.some(t => norm.includes(t)));
+  const iconName = found ? found.file : 'unknown';
+
   const iconPath = `${process.env.PUBLIC_URL}/icons/weather/${iconName}.svg`;
 
   return (
@@ -38,10 +33,7 @@ export const WeatherIcon: React.FC<WeatherIconProps> = ({ condition, size = 64 }
       alt={condition}
       width={size}
       height={size}
-      style={{
-        verticalAlign: "middle",
-        filter: "drop-shadow(0 0 6px rgba(0,0,0,0.15))",
-      }}
+      style={{ verticalAlign: 'middle', filter: 'drop-shadow(0 0 6px rgba(0,0,0,0.25))' }}
       onError={(e) => {
         (e.target as HTMLImageElement).src = `${process.env.PUBLIC_URL}/icons/weather/unknown.svg`;
       }}
