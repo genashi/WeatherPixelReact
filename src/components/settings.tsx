@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Drawer, List, Typography, Switch, Divider } from "antd";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../Store/store';
-import { setIsCelsius, setIsKmPerHour, setIsMbar } from '../Store/Slices/MeasurementSlice';
-import { toggleDarkMode } from '../Store/Slices/SettingsSlice'; // <--- добавь это
+import { toggleTemperatureUnit, toggleWindSpeedUnit, togglePressureUnit } from '../Store/Slices/MeasurementSlice';
+import { toggleTheme } from '../Store/Slices/SettingsSlice';
 import { MoreOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
@@ -11,17 +11,15 @@ const { Title, Text } = Typography;
 export const SettingsDrawer: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const dispatch = useDispatch();
-  const { isCelsius, isKmPerHour, isMbar } = useSelector((state: RootState) => state.measurement);
-  const isDarkMode = useSelector((state: RootState) => state.settings.isDarkMode); // <---
+  const { temperature, windSpeed, pressure } = useSelector((state: RootState) => state.measurement);
+  const { theme } = useSelector((state: RootState) => state.settings);
 
   return (
     <div style={{ position: "relative", zIndex: 1 }}>
-      {/* Кнопка троеточия */}
       <div style={{ position: "absolute", top: 20, right: 20, cursor: "pointer" }}>
         <MoreOutlined style={{ fontSize: "24px" }} onClick={() => setIsDrawerOpen(true)} />
       </div>
 
-      {/* Drawer с настройками */}
       <Drawer
         title="Настройки"
         placement="right"
@@ -34,35 +32,35 @@ export const SettingsDrawer: React.FC = () => {
           <List.Item>
             <Text>Тёмная тема</Text>
             <Switch
-              checked={isDarkMode}
-              onChange={() => dispatch(toggleDarkMode())}
+              checked={theme === 'dark'}
+              onChange={() => dispatch(toggleTheme())}
             />
           </List.Item>
           <List.Item>
             <Text>Температура</Text>
             <Switch
-              checked={isCelsius}
+              checked={temperature === 'celsius'}
               checkedChildren="°C"
               unCheckedChildren="°F"
-              onChange={(checked) => dispatch(setIsCelsius(checked))}
+              onChange={() => dispatch(toggleTemperatureUnit())}
             />
           </List.Item>
           <List.Item>
             <Text>Скорость ветра</Text>
             <Switch
-              checked={isKmPerHour}
+              checked={windSpeed === 'kmh'}
               checkedChildren="км/ч"
               unCheckedChildren="м/с"
-              onChange={(checked) => dispatch(setIsKmPerHour(checked))}
+              onChange={() => dispatch(toggleWindSpeedUnit())}
             />
           </List.Item>
           <List.Item>
             <Text>Давление</Text>
             <Switch
-              checked={isMbar}
+              checked={pressure === 'mbar'}
               checkedChildren="мм.рт.ст"
               unCheckedChildren="гПа"
-              onChange={(checked) => dispatch(setIsMbar(checked))}
+              onChange={() => dispatch(togglePressureUnit())}
             />
           </List.Item>
         </List>

@@ -35,7 +35,7 @@ interface WeatherResponse {
         };
         hour: Array<{
           time: string; // Время в формате YYYY-MM-DD HH:MM
-          temp_c: number; // Температура в градусах Цельсия
+          temp_c: number; // Температура в градусах Целься
           humidity: number; // Влажность
           pressure_mb: number; // Давление
           wind_mph: number; // Скорость ветра
@@ -59,7 +59,7 @@ export const weatherApi = createApi({
   endpoints: (builder) => ({
     getWeatherByCity: builder.query<WeatherResponse, string>({
       query: (city) => 
-        `forecast.json?q=${city}&key=becd5e99eb7a4ada942122852240912&days=7&aqi=no&alerts=no&lang=ru`,
+        `forecast.json?q=${city}&key=${process.env.REACT_APP_WEATHER_API_KEY}&days=7&aqi=no&alerts=no&lang=ru`,
     }),
   }),
 });

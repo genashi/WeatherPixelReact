@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../Store/store';
 import { useDynamicTheme } from './useDynamicTheme';
