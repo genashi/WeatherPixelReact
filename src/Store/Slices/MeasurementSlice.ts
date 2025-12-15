@@ -1,49 +1,33 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface MeasurementState {
-  temperature: 'celsius' | 'fahrenheit';
-  windSpeed: 'kmh' | 'ms';
-  pressure: 'mbar' | 'mmHg';
+  isCelsius: boolean; // Температура (°C или °F)
+  isKmPerHour: boolean; // Скорость ветра (м/с или км/ч)
+  isMbar: boolean; //Давление
 }
 
 const initialState: MeasurementState = {
-  temperature: 'celsius',
-  windSpeed: 'kmh',
-  pressure: 'mbar',
+  isCelsius: true, // По умолчанию — Цельсии
+  isKmPerHour: true, // По умолчанию — км/ч
+  isMbar: true,
 };
 
 const measurementSlice = createSlice({
   name: 'measurement',
   initialState,
   reducers: {
-    setTemperatureUnit(state, action: PayloadAction<'celsius' | 'fahrenheit'>) {
-      state.temperature = action.payload;
+    setIsCelsius(state, action: PayloadAction<boolean>) {
+      state.isCelsius = action.payload;
     },
-    toggleTemperatureUnit(state) {
-      state.temperature = state.temperature === 'celsius' ? 'fahrenheit' : 'celsius';
+    setIsKmPerHour(state, action: PayloadAction<boolean>) {
+      state.isKmPerHour = action.payload;
     },
-    setWindSpeedUnit(state, action: PayloadAction<'kmh' | 'ms'>) {
-      state.windSpeed = action.payload;
-    },
-    toggleWindSpeedUnit(state) {
-      state.windSpeed = state.windSpeed === 'kmh' ? 'ms' : 'kmh';
-    },
-    setPressureUnit(state, action: PayloadAction<'mbar' | 'mmHg'>) {
-      state.pressure = action.payload;
-    },
-    togglePressureUnit(state) {
-      state.pressure = state.pressure === 'mbar' ? 'mmHg' : 'mbar';
-    }
+    setIsMbar(state, action: PayloadAction<boolean>) {
+        state.isMbar = action.payload;
+      },
   },
 });
 
-export const {
-  setTemperatureUnit,
-  toggleTemperatureUnit,
-  setWindSpeedUnit,
-  toggleWindSpeedUnit,
-  setPressureUnit,
-  togglePressureUnit
-} = measurementSlice.actions;
+export const { setIsCelsius, setIsKmPerHour, setIsMbar } = measurementSlice.actions;
 
 export default measurementSlice.reducer;
