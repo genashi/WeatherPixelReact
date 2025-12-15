@@ -59,7 +59,7 @@ export const weatherApi = createApi({
   endpoints: (builder) => ({
     getWeatherByCity: builder.query<WeatherResponse, string>({
       query: (city) => 
-        `forecast.json?q=${city}&key=${process.env.REACT_APP_WEATHER_API_KEY}&days=7&aqi=no&alerts=no&lang=ru`,
+        `forecast.json?q=${city}&key=d8804f93b66f4770832104207240407&days=7&aqi=no&alerts=no&lang=ru`,
     }),
   }),
 });
