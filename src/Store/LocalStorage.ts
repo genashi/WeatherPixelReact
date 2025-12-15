@@ -1,42 +1,20 @@
-export const saveToLocalStorage = (state: any) => {
+export const saveToLocalStorage = (key: string, state: any) => {
     try {
       const serializedState = JSON.stringify(state);
-      localStorage.setItem('cities', serializedState);
+      localStorage.setItem(key, serializedState);
     } catch (e) {
-      console.error('Не удалось сохранить города в localStorage:', e);
-    }
-  };
-  export const saveToLocalStorageMeasurement = (state: any) => {
-    try {
-      const serializedState = JSON.stringify(state);
-      localStorage.setItem('measurement', serializedState);
-    } catch (e) {
-      console.error('Не удалось сохранить города в localStorage:', e);
+      console.error(`Не удалось сохранить ${key} в localStorage:`, e);
     }
   };
   
-  
-  export const loadFromLocalStorage = () => {
+  export const loadFromLocalStorage = (key: string) => {
     try {
-      const serializedState = localStorage.getItem('cities');
+      const serializedState = localStorage.getItem(key);
       if (serializedState === null) return undefined; 
       
-      return JSON.parse(serializedState); // Парсим сохранённый JSON
+      return JSON.parse(serializedState);
     } catch (e) {
-      console.error('Не удалось загрузить города из localStorage:', e);
+      console.error(`Не удалось загрузить ${key} из localStorage:`, e);
       return undefined;
     }
   };
-  
-  export const loadFromLocalStorageMeasurement = () => {
-    try {
-      const serializedState = localStorage.getItem('measurement');
-      if (serializedState === null) return undefined; 
-      
-      return JSON.parse(serializedState); // Парсим сохранённый JSON
-    } catch (e) {
-      console.error('Не удалось загрузить города из localStorage:', e);
-      return undefined;
-    }
-  };
-  

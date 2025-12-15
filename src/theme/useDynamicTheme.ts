@@ -8,7 +8,8 @@ import {
 } from './themes';
 
 export const useDynamicTheme = (conditionText?: string) => {
-  const isDark = useSelector((state: RootState) => state.settings.isDarkMode);
+  const theme = useSelector((state: RootState) => state.settings.theme);
+  const isDark = theme === 'dark';
   const base = isDark ? darkTheme : lightTheme;
   const gradients = isDark ? weatherGradientsDark : weatherGradientsLight;
 
