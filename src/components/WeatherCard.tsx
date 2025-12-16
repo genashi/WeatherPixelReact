@@ -15,7 +15,7 @@ export const WeatherCard: React.FC = () => {
 
   const convertTemperature = (temp: number) => (isCelsius ? temp : temp * 9 / 5 + 32);
   const convertWindSpeed = (speed: number) => (isKmPerHour ? speed * 3.6 : speed);
-  const convertPressure = (pressure: number) => (isMbar ? pressure * 0.7501 : pressure); // Исправил опечатку в имени функции
+  const convertPressure = (pressure: number) => (isMbar ? pressure * 0.7501 : pressure);
 
   const getNext4HoursForecast = () => {
     if (!data || !data.forecast || !data.forecast.forecastday) return [];
@@ -38,9 +38,9 @@ export const WeatherCard: React.FC = () => {
   return (
     <div style={{
       padding: "20px",
-      background: "linear-gradient(to bottom, #222a7f, #72809d)", // Градиент как просил
+      background: "linear-gradient(to bottom, #222a7f, #72809d)",
       minHeight: "100vh",
-      fontFamily: "'Roboto Rounded', sans-serif", // Округлый шрифт — добавь Google Fonts в index.html
+      fontFamily: "'Roboto Rounded', sans-serif",
       color: "#fff", // Белый текст для контраста на градиенте
     }}>
       <ManageLocations />
@@ -64,28 +64,28 @@ export const WeatherCard: React.FC = () => {
               <Text style={{ display: "block", fontSize: "100%", color: "#fff" }}>
                 {data.current.condition.text}
               </Text>
-              <div style={{ fontSize: "1000%", lineHeight: 1, marginBottom: "150px" }}>
+              <div style={{ fontSize: "clamp(40px, 20vw, 160px)", lineHeight: 1, marginBottom: "150px" }}>
                 {convertTemperature(data.current.temp_c).toFixed(1)}°{isCelsius ? 'C' : 'F'}
               </div>
               <Divider style={{ borderColor: "#fff" }} />
               <Row justify="space-around" style={{ marginTop: "20px" }}>
                 <Col>
-                  <Text>Ветер: {convertWindSpeed(data.current.wind_mph).toFixed(1)} {isKmPerHour ? 'км/ч' : 'м/с'}</Text>
+                  <Text style={{ color: "#fff" }}>Ветер: {convertWindSpeed(data.current.wind_mph).toFixed(1)} {isKmPerHour ? 'км/ч' : 'м/с'}</Text>
                 </Col>
                 <Col>
-                  <Text>Давление: {convertPressure(data.current.pressure_mb).toFixed(1)} {isMbar ? 'мм.рт.ст' : 'гПа'}</Text>
+                  <Text style={{ color: "#fff" }}>Давление: {convertPressure(data.current.pressure_mb).toFixed(1)} {isMbar ? 'мм.рт.ст' : 'гПа'}</Text>
                 </Col>
                 <Col>
-                  <Text>Влажность: {data.current.humidity}%</Text>
+                  <Text style={{ color: "#fff" }}>Влажность: {data.current.humidity}%</Text>
                 </Col>
               </Row>
             </div>
 
             {/* Почасовой прогноз: Horizontal scroll, столбец на час (temp, icon, humidity, time) */}
             <Card style={{
-              borderRadius: "20px", // Увеличенный радиус
+              borderRadius: "20px",
               marginBottom: "20px",
-              background: "#191919", // Тёмный фон
+              background: "#191919", 
               border: "none",
             }}>
               <Title level={4} style={{ color: "#fff" }}>Почасовой прогноз</Title>
@@ -107,13 +107,13 @@ export const WeatherCard: React.FC = () => {
               </div>
             </Card>
 
-            {/* Прогноз по дням: Аналогично, но с датами вместо времени, + осадки */}
+            {/* Прогноз по дням + осадки */}
             <Card style={{
               borderRadius: "20px", // Увеличенный радиус
               background: "#191919", // Тёмный фон
               border: "none",
             }}>
-              <Title level={4} style={{ color: "#fff" }}>Прогноз на 7 дней</Title>
+              <Title level={4} style={{ color: "#fff" }}>Прогноз на 3 дня</Title>
               <div style={{ overflowX: "auto", whiteSpace: "nowrap" }}>
                 <Row gutter={16} style={{ display: "inline-flex" }}>
                   {data.forecast.forecastday.map((day, index) => (
